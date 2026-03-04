@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Celena Dixon — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F5F0E8;
+      --ink: #1A1714;
+      --warm-mid: #8C7B6B;
+      --accent: #C4532A;
+      --light-rule: #E0D9CE;
+      --card-hover: #EDE7DC;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, width 0.25s ease, height 0.25s ease, background 0.25s ease;
+      mix-blend-mode: multiply;
+    }
+    .cursor.hovering {
+      width: 40px;
+      height: 40px;
+      background: var(--accent);
+      opacity: 0.3;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 48px;
+      background: var(--cream);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+    nav.scrolled { border-color: var(--light-rule); }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .nav-logo span { font-style: italic; color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--warm-mid);
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+
+    /* HERO */
+    .hero {
+      padding: 160px 48px 60px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+      border-bottom: 1px solid var(--light-rule);
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 7vw, 6.5rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--warm-mid);
+      max-width: 260px;
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    /* FILTER BAR */
+    .filter-bar {
+      display: flex;
+      gap: 0;
+      padding: 0 48px;
+      border-bottom: 1px solid var(--light-rule);
+    }
+    .filter-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 18px 28px 16px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--warm-mid);
+      cursor: none;
+      transition: color 0.2s, border-color 0.2s;
+      margin-bottom: -1px;
+    }
+    .filter-btn:hover { color: var(--ink); }
+    .filter-btn.active {
+      color: var(--ink);
+      border-bottom-color: var(--accent);
+    }
+
+    /* GRID */
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 2px;
+      padding: 2px;
+      background: var(--light-rule);
+    }
+
+    /* Cards */
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: var(--cream);
+      cursor: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease, background 0.25s ease;
+    }
+    .card.visible { opacity: 1; transform: translateY(0); }
+    .card:hover { background: var(--card-hover); }
+
+    /* Grid span variants — mirrors Emma Smith's varied masonry feel */
+    .card.span-8  { grid-column: span 8; }
+    .card.span-6  { grid-column: span 6; }
+    .card.span-4  { grid-column: span 4; }
+    .card.span-12 { grid-column: span 12; }
+
+    .card-img-wrap {
+      width: 100%;
+      overflow: hidden;
+      background: var(--light-rule);
+    }
+    .card.span-8  .card-img-wrap { height: 420px; }
+    .card.span-6  .card-img-wrap { height: 360px; }
+    .card.span-4  .card-img-wrap { height: 300px; }
+    .card.span-12 .card-img-wrap { height: 500px; }
+
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s ease;
+      filter: saturate(0.9);
+    }
+    .card:hover .card-img-wrap img {
+      transform: scale(1.04);
+      filter: saturate(1.05);
+    }
+
+    /* Placeholder for cards without images */
+    .card-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #E8E0D4 0%, #D5C9BC 100%);
+    }
+    .placeholder-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--warm-mid);
+      opacity: 0.6;
+    }
+
+    .card-info {
+      padding: 20px 24px 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .card-text {}
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 5px;
+    }
+    .card-sub {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--warm-mid);
+      line-height: 1.5;
+      max-width: 340px;
+    }
+    .card-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--warm-mid);
+      white-space: nowrap;
+      padding-top: 3px;
+      flex-shrink: 0;
+    }
+
+    /* Card link overlay */
+    .card-link {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      text-decoration: none;
+    }
+
+    /* Arrow indicator on hover */
+    .card-arrow {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--ink);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.8) rotate(-45deg);
+      transition: opacity 0.25s ease, transform 0.3s ease;
+      background: var(--ink);
+      color: var(--cream);
+      font-size: 0.9rem;
+      z-index: 5;
+    }
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+
+    /* ABOUT STRIP */
+    .about-strip {
+      padding: 80px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      border-top: 1px solid var(--light-rule);
+      margin-top: 2px;
+    }
+    .about-strip h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 300;
+      line-height: 1.15;
+    }
+    .about-strip h2 em { font-style: italic; color: var(--accent); }
+    .about-right { display: flex; flex-direction: column; justify-content: center; gap: 20px; }
+    .about-right p {
+      font-size: 0.9rem;
+      line-height: 1.9;
+      color: var(--warm-mid);
+    }
+    .about-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 2px;
+      width: fit-content;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .about-link:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--light-rule);
+      padding: 28px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--warm-mid);
+    }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--warm-mid);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--ink); }
+
+    /* Hidden cards for filter */
+    .card.hidden {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .hero { padding: 120px 24px 48px; flex-direction: column; align-items: flex-start; }
+      .hero-sub { text-align: left; }
+      .filter-bar { padding: 0 24px; overflow-x: auto; }
+      .work-grid { grid-template-columns: repeat(6, 1fr); }
+      .card.span-8 { grid-column: span 6; }
+      .card.span-4 { grid-column: span 6; }
+      .card.span-12 { grid-column: span 6; }
+      .about-strip { grid-template-columns: 1fr; gap: 40px; padding: 48px 24px; }
+      footer { flex-direction: column; gap: 16px; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">Celena <span>Dixon</span></a>
+    <ul class="nav-links">
+      <li><a href="#work" class="active">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="mailto:cdixon@ucdavis.edu">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1 class="hero-title">
+      Design &<br><em>Visual</em><br>Direction
+    </h1>
+    <p class="hero-sub">
+      Graphic Design &amp; Brand Identity<br>
+      UC Davis · Davis, CA<br>
+      Available for freelance work
+    </p>
+  </section>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar" id="work">
+    <button class="filter-btn active" data-filter="all">All Work</button>
+    <button class="filter-btn" data-filter="branding">Branding</button>
+    <button class="filter-btn" data-filter="social">Social Media</button>
+    <button class="filter-btn" data-filter="print">Print</button>
+    <button class="filter-btn" data-filter="motion">Motion</button>
+  </div>
+
+  <!-- ============================================================
+       WORK GRID — ADD / EDIT PROJECTS HERE
+       
+       Each .card needs:
+         - data-category="branding|social|print|motion" (for filter)
+         - a span class: span-8, span-6, span-4, or span-12
+         - Replace the <img> src with your image path or URL
+         - Update .card-title, .card-sub, .card-year
+         - Update the href on .card-link (can point to a detail page or "#")
+       ============================================================ -->
+  <section class="work-grid">
+
+    <!-- PROJECT 1 — Large left card -->
+    <article class="card span-8" data-category="branding">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <!-- REPLACE src WITH YOUR IMAGE -->
+        <div class="card-placeholder"><span class="placeholder-label">1200 × 840 recommended</span></div>
+        <!-- <img src="your-image.jpg" alt="Project Name"> -->
+      </div>
+      <div class="card-info">
+        <div class="card-text">
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project — client name, role, or context.</p>
+        </div>
+        <span class="card-year">2025</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </article>
+
+    <!-- PROJECT 2 — Small right card -->
+    <article class="card span-4" data-category="social">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder"><span class="placeholder-label">800 × 600 recommended</span></div>
+        <!-- <img src="your-image.jpg" alt="Project Name"> -->
+      </div>
+      <div class="card-info">
+        <div class="card-text">
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project.</p>
+        </div>
+        <span class="card-year">2025</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </article>
+
+    <!-- PROJECT 3 — Half width -->
+    <article class="card span-6" data-category="branding">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder"><span class="placeholder-label">900 × 720 recommended</span></div>
+        <!-- <img src="your-image.jpg" alt="Project Name"> -->
+      </div>
+      <div class="card-info">
+        <div class="card-text">
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project.</p>
+        </div>
+        <span class="card-year">2025</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </article>
+
+    <!-- PROJECT 4 — Half width -->
+    <article class="card span-6" data-category="print">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder"><span class="placeholder-label">900 × 720 recommended</span></div>
+        <!-- <img src="your-image.jpg" alt="Project Name"> -->
+      </div>
+      <div class="card-info">
+        <div class="card-text">
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project.</p>
+        </div>
+        <span class="card-year">2025</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </article>
+
+    <!-- PROJECT 5 — Small -->
+    <article class="card span-4" data-category="social">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder"><span class="placeholder-label">800 × 600 recommended</span></div>
+        <!-- <img src="your-image.jpg" alt="Project Name"> -->
+      </div>
+      <div class="card-info">
+        <div class="card-text">
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project.</p>
+        </div>
+        <span class="card-year">2024</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </article>
+
+    <!-- PROJECT 6 — Large right -->
+    <article class="card span-8" data-category="branding">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder"><span class="placeholder-label">1200 × 840 recommended</span></div>
+        <!-- <img src="your-image.jpg" alt="Project Name"> -->
+      </div>
+      <div class="card-info">
+        <div class="card-text">
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project.</p>
+        </div>
+        <span class="card-year">2024</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </article>
+
+    <!-- PROJECT 7 — Full width feature -->
+    <article class="card span-12" data-category="motion">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder"><span class="placeholder-label">1600 × 900 recommended</span></div>
+        <!-- <img src="your-image.jpg" alt="Project Name"> -->
+      </div>
+      <div class="card-info">
+        <div class="card-text">
+          <p class="card-title">Featured Project Title</p>
+          <p class="card-sub">A more detailed description can go here for a featured full-width project — client, scope, outcome.</p>
+        </div>
+        <span class="card-year">2024</span>
+      </div>
+      <div class="card-arrow">→</div>
+    </article>
+
+  </section>
+  <!-- END WORK GRID -->
+
+  <!-- ABOUT STRIP -->
+  <section class="about-strip" id="about">
+    <h2>Design with<br><em>intention.</em><br>Built to connect.</h2>
+    <div class="about-right">
+      <p>
+        I'm Celena Dixon — a graphic designer and Design &amp; Studio Art student at UC Davis with a passion for brand identity, visual communication, and creating work that resonates. Currently External Brand Director at All Things Design and Graphic Designer at the UC Davis College of Engineering.
+      </p>
+      <p>
+        I thrive at the intersection of strategy and aesthetics — managing teams, building brand systems, and keeping client work organized and on-point across multiple projects at once.
+      </p>
+      <a href="mailto:cdixon@ucdavis.edu" class="about-link">Get in touch →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Celena Dixon</p>
+    <div class="footer-links">
+      <a href="mailto:cdixon@ucdavis.edu">Email</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Instagram</a>
+    </div>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+    });
+
+    // Nav scroll state
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.card');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        cards.forEach(card => {
+          const match = filter === 'all' || card.dataset.category === filter;
+          card.classList.toggle('hidden', !match);
+          if (match) {
+            setTimeout(() => card.classList.add('visible'), 50);
+          }
+        });
+      });
+    });
+
+    // Scroll-in animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    cards.forEach(card => observer.observe(card));
+  </script>
+</body>
+</html>
