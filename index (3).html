@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Celena Dixon — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #F5F2EC;
+      --cream2:   #EEE9DF;
+      --ink:      #1C1F18;
+      --mid:      #7A8570;
+      --rule:     #D8D5CC;
+      --moss:     #4A6741;
+      --moss-l:   #C8DAC4;
+      --fern:     #6B8F5E;
+      --fern-l:   #DCE8D8;
+      --sage:     #9AB48A;
+      --sage-l:   #E8F0E4;
+      --leaf:     #3D5C35;
+      --glass-bg: rgba(255,255,255,0.48);
+      --glass-b:  rgba(255,255,255,0.76);
+      --glass-sh: rgba(100,130,90,0.13);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════
+       AMBIENT BACKGROUND ORBS
+    ══════════════════════════════ */
+    .bg-orbs {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(90px); opacity: 0.32;
+      animation: orbDrift 22s ease-in-out infinite;
+    }
+    .orb-1 { width:580px;height:580px;background:radial-gradient(circle,#C8DAC4,transparent 70%);top:-140px;right:-80px;animation-duration:22s; }
+    .orb-2 { width:460px;height:460px;background:radial-gradient(circle,#DCE8D8,transparent 70%);bottom:8%;left:-70px;animation-duration:27s;animation-delay:-9s; }
+    .orb-3 { width:340px;height:340px;background:radial-gradient(circle,#E0EDD8,transparent 70%);top:40%;right:16%;animation-duration:24s;animation-delay:-5s; }
+    .orb-4 { width:260px;height:260px;background:radial-gradient(circle,#D0E4C8,transparent 70%);top:60%;left:28%;animation-duration:30s;animation-delay:-14s; }
+    @keyframes orbDrift {
+      0%,100%{ transform:translate(0,0) scale(1); }
+      25%    { transform:translate(28px,-38px) scale(1.05); }
+      50%    { transform:translate(-20px,28px) scale(0.95); }
+      75%    { transform:translate(38px,18px) scale(1.03); }
+    }
+
+    /* ══════════════════════════════
+       GLASS UTILITY
+    ══════════════════════════════ */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(22px) saturate(190%);
+      -webkit-backdrop-filter: blur(22px) saturate(190%);
+      border: 1px solid var(--glass-b);
+      box-shadow:
+        0 8px 32px var(--glass-sh),
+        inset 0 1.5px 0 rgba(255,255,255,0.9),
+        inset 0 -1px 0 rgba(255,255,255,0.25);
+    }
+    .glass-shimmer { position: relative; overflow: hidden; }
+    .glass-shimmer::before {
+      content: '';
+      position: absolute; top:-60%; left:-70%;
+      width: 44%; height: 220%;
+      background: linear-gradient(108deg,transparent 28%,rgba(255,255,255,0.6) 50%,transparent 72%);
+      transform: skewX(-18deg);
+      animation: shimmerPass 6s ease-in-out infinite;
+      pointer-events: none; z-index: 10;
+    }
+    @keyframes shimmerPass {
+      0%  { left:-70%; opacity:0; }
+      15% { opacity:1; }
+      65% { left:120%; opacity:0.5; }
+      100%{ left:130%; opacity:0; }
+    }
+
+    /* ══════════════════════════════
+       SPARKLE CURSOR
+    ══════════════════════════════ */
+    #cur-dot {
+      position: fixed; width:12px; height:12px; border-radius:50%;
+      background: var(--moss); pointer-events:none; z-index:9999;
+      transform:translate(-50%,-50%);
+      transition: width .3s cubic-bezier(.34,1.56,.64,1),
+                  height .3s cubic-bezier(.34,1.56,.64,1),
+                  background .25s;
+      box-shadow: 0 0 10px rgba(74,103,65,.6);
+    }
+    #cur-ring {
+      position: fixed; width:36px; height:36px; border-radius:50%;
+      border: 1.5px solid rgba(74,103,65,.45);
+      pointer-events:none; z-index:9998;
+      transform:translate(-50%,-50%);
+      transition: width .45s cubic-bezier(.23,1,.32,1),
+                  height .45s cubic-bezier(.23,1,.32,1),
+                  border-color .3s, border-radius .4s;
+    }
+    body.hov-card #cur-dot  { width:7px; height:7px; }
+    body.hov-card #cur-ring { width:60px; height:60px; border-radius:35% 65% 58% 42%/48% 42% 58% 52%; border-color:rgba(74,103,65,.65); }
+    body.hov-link #cur-dot  { width:9px; height:9px; }
+    body.hov-link #cur-ring { width:38px; height:12px; border-radius:8px; }
+    body.hov-btn  #cur-dot  { width:18px; height:18px; }
+    body.hov-btn  #cur-ring { width:52px; height:52px; border-color:rgba(74,103,65,.28); }
+
+    .spark {
+      position:fixed; pointer-events:none; z-index:9997; border-radius:50%;
+      transform:translate(-50%,-50%);
+      animation:sparkOut var(--dur,.6s) ease-out forwards;
+    }
+    @keyframes sparkOut {
+      0%  { opacity:1; transform:translate(-50%,-50%) translate(0,0) scale(1); }
+      100%{ opacity:0; transform:translate(-50%,-50%) translate(var(--ex,0px),var(--ey,0px)) scale(0); }
+    }
+
+    /* ══════════════════════════════
+       NAV
+    ══════════════════════════════ */
+    nav {
+      position: fixed; top:16px; left:50%; transform:translateX(-50%);
+      z-index: 500; width:calc(100% - 64px); max-width:1200px;
+      display: flex; align-items:center; justify-content:space-between;
+      padding: 14px 30px; border-radius:100px;
+      transition: box-shadow .3s;
+    }
+    nav.scrolled {
+      box-shadow: 0 16px 48px rgba(80,110,70,.18),
+                  inset 0 1px 0 rgba(255,255,255,.92);
+    }
+    .nav-logo {
+      font-family:'Cormorant Garamond',serif;
+      font-weight:300; font-size:1.3rem; letter-spacing:.06em;
+      text-decoration:none; color:var(--ink);
+    }
+    .nav-logo span { font-style:italic; color:var(--moss); }
+    .nav-links { display:flex; gap:32px; list-style:none; align-items:center; }
+    .nav-links a {
+      font-family:'DM Mono',monospace; font-size:.68rem;
+      letter-spacing:.14em; text-transform:uppercase;
+      text-decoration:none; color:var(--mid); transition:color .2s;
+    }
+    .nav-links a:hover { color:var(--ink); }
+
+    /* ══════════════════════════════
+       HERO
+    ══════════════════════════════ */
+    .hero {
+      position:relative; z-index:1;
+      padding: 148px 48px 60px;
+      display: flex; align-items:flex-end;
+      justify-content:space-between; gap:40px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .hero-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size: clamp(3.5rem,7vw,6.5rem);
+      font-weight:300; line-height:.95; letter-spacing:-.01em;
+    }
+    .hero-title em { font-style:italic; color:var(--moss); }
+
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 18px; border-radius:100px; margin-top:24px;
+      font-family:'DM Mono',monospace; font-size:.64rem;
+      letter-spacing:.14em; text-transform:uppercase; color:var(--ink);
+    }
+    .badge-dot {
+      width:7px; height:7px; background:var(--moss); border-radius:50%;
+      box-shadow:0 0 6px var(--moss);
+      animation:pulseGlow 2s ease-in-out infinite;
+    }
+    @keyframes pulseGlow {
+      0%,100%{ transform:scale(1); box-shadow:0 0 5px var(--moss); }
+      50%    { transform:scale(1.4); box-shadow:0 0 14px var(--moss); }
+    }
+    .hero-sub {
+      font-family:'DM Mono',monospace; font-size:.7rem;
+      letter-spacing:.14em; text-transform:uppercase;
+      color:var(--mid); max-width:260px; text-align:right; line-height:1.8;
+    }
+
+    /* ══════════════════════════════
+       FILTER BAR
+    ══════════════════════════════ */
+    .filter-wrap {
+      position:sticky; top:78px; z-index:400;
+      padding:10px 48px;
+      background:rgba(245,242,236,0.84);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--rule);
+    }
+    .filter-bar {
+      display:flex; gap:3px; align-items:center;
+      padding:5px; border-radius:100px; width:fit-content;
+    }
+    .filter-btn {
+      font-family:'DM Mono',monospace; font-size:.66rem;
+      letter-spacing:.14em; text-transform:uppercase;
+      padding:8px 18px; border-radius:100px; border:none;
+      background:transparent; color:var(--mid); cursor:none;
+      transition:color .2s, background .2s, box-shadow .2s;
+    }
+    .filter-btn:hover { color:var(--ink); background:rgba(255,255,255,.6); }
+    .filter-btn.active {
+      color:#fff; background:var(--moss);
+      box-shadow:0 4px 12px rgba(74,103,65,.3);
+    }
+
+    /* ══════════════════════════════
+       WORK GRID
+    ══════════════════════════════ */
+    .work-grid {
+      display:grid; grid-template-columns:repeat(12,1fr);
+      gap:2px; background:var(--rule); padding:2px;
+      position:relative; z-index:1;
+    }
+    .card {
+      position:relative; background:var(--cream); overflow:hidden; cursor:none;
+      opacity:0; transform:translateY(20px);
+      transition:opacity .5s ease, transform .5s ease;
+    }
+    .card.visible { opacity:1; transform:translateY(0); }
+    .card.hidden  { display:none; }
+
+    .card.span-8  { grid-column:span 8; }
+    .card.span-6  { grid-column:span 6; }
+    .card.span-4  { grid-column:span 4; }
+    .card.span-12 { grid-column:span 12; }
+
+    .card-img-wrap { width:100%; overflow:hidden; background:#fff; position:relative; }
+    .card.span-8  .card-img-wrap { height:420px; }
+    .card.span-6  .card-img-wrap { height:360px; }
+    .card.span-4  .card-img-wrap { height:300px; }
+    .card.span-12 .card-img-wrap { height:500px; }
+
+    .card-img-wrap img {
+      width:100%; height:100%; object-fit:cover; display:block;
+      transition:transform .65s cubic-bezier(.25,.46,.45,.94), filter .4s;
+      filter:saturate(.92);
+    }
+    .card:hover .card-img-wrap img { transform:scale(1.04); filter:saturate(1.05); }
+
+    .card-glass-overlay {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      background:rgba(255,255,255,0);
+      backdrop-filter:blur(0px); -webkit-backdrop-filter:blur(0px);
+      transition:background .35s, backdrop-filter .35s;
+      pointer-events:none; z-index:2;
+    }
+    .card:hover .card-glass-overlay {
+      background:rgba(232,240,228,0.18);
+      backdrop-filter:blur(2.5px); -webkit-backdrop-filter:blur(2.5px);
+    }
+    .card-cta {
+      padding:10px 22px; border-radius:100px;
+      font-family:'DM Mono',monospace; font-size:.65rem;
+      letter-spacing:.12em; text-transform:uppercase;
+      color:var(--ink); white-space:nowrap;
+      opacity:0; transform:translateY(10px) scale(.92);
+      transition:opacity .28s, transform .35s cubic-bezier(.34,1.56,.64,1);
+      pointer-events:none;
+    }
+    .card:hover .card-cta { opacity:1; transform:translateY(0) scale(1); }
+
+    .card-placeholder {
+      width:100%; height:100%;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:10px;
+      background:var(--cream2);
+    }
+    .ph-icon {
+      width:48px; height:48px; border:1.5px dashed var(--rule); border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      color:var(--mid); font-size:1rem;
+    }
+    .placeholder-label {
+      font-family:'DM Mono',monospace; font-size:.58rem;
+      letter-spacing:.14em; text-transform:uppercase; color:var(--mid); opacity:.55;
+    }
+    .card-info {
+      padding:20px 24px 24px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+    }
+    .card-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.25rem; font-weight:400; color:var(--ink);
+      line-height:1.2; margin-bottom:5px; transition:color .2s;
+    }
+    .card:hover .card-title { color:var(--moss); }
+    .card-sub {
+      font-family:'Outfit',sans-serif; font-size:.76rem;
+      font-weight:300; color:var(--mid); line-height:1.5; max-width:340px;
+    }
+    .card-meta { display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0; padding-top:2px; }
+    .card-year { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--mid); }
+    .card-tag {
+      font-family:'DM Mono',monospace; font-size:.6rem;
+      letter-spacing:.1em; text-transform:uppercase;
+      color:var(--moss); background:var(--fern-l); padding:3px 10px; border-radius:100px;
+    }
+    .card-link { position:absolute; inset:0; z-index:10; }
+
+    /* ══════════════════════════════
+       ABOUT STRIP
+    ══════════════════════════════ */
+    .about-strip {
+      padding:80px 48px;
+      display:grid; grid-template-columns:1fr 1fr; gap:80px;
+      border-top:1px solid var(--rule);
+      position:relative; z-index:1;
+    }
+    .about-strip h2 {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2rem,4vw,3.2rem); font-weight:300; line-height:1.15;
+    }
+    .about-strip h2 em { font-style:italic; color:var(--moss); }
+    .about-right { display:flex; flex-direction:column; justify-content:center; gap:20px; }
+    .about-right p { font-size:.88rem; line-height:1.9; color:var(--mid); }
+
+    /* ══════════════════════════════
+       GET IN TOUCH — RAINBOW BUTTON
+    ══════════════════════════════ */
+    .env-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'DM Mono', monospace; font-size: .7rem;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--ink);
+      border: none; border-bottom: 1px solid var(--ink);
+      padding-bottom: 2px; background: none;
+      cursor: none;
+      position: relative;
+      transition: border-color .3s;
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    @keyframes rainbowShift {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    .env-btn:hover {
+      background-image: linear-gradient(
+        90deg,
+        #f87171, #fb923c, #fbbf24, #a3e635,
+        #34d399, #38bdf8, #818cf8, #e879f9, #f87171
+      );
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      border-color: transparent;
+      animation: rainbowShift 1.4s linear infinite;
+    }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      border-top:1px solid var(--rule); padding:26px 48px;
+      display:flex; justify-content:space-between; align-items:center;
+      background:var(--cream2); position:relative; z-index:1;
+    }
+    footer p { font-family:'DM Mono',monospace; font-size:.62rem; letter-spacing:.1em; color:var(--mid); }
+    .footer-links { display:flex; gap:28px; }
+    .footer-links a {
+      font-family:'DM Mono',monospace; font-size:.62rem; letter-spacing:.1em;
+      text-decoration:none; color:var(--mid); transition:color .2s;
+    }
+    .footer-links a:hover { color:var(--moss); }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media(max-width:900px){
+      nav{ width:calc(100% - 32px); padding:12px 20px; }
+      .hero{ padding:128px 24px 52px; flex-direction:column; align-items:flex-start; }
+      .hero-sub{ text-align:left; }
+      .filter-wrap{ padding:10px 24px; }
+      .work-grid{ grid-template-columns:repeat(6,1fr); }
+      .card.span-8, .card.span-4, .card.span-12{ grid-column:span 6; }
+      .about-strip{ grid-template-columns:1fr; gap:36px; padding:48px 24px; }
+      footer{ flex-direction:column; gap:14px; padding:24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+
+  <div id="cur-dot"></div>
+  <div id="cur-ring"></div>
+
+  <!-- NAV -->
+  <nav id="nav" class="glass glass-shimmer">
+    <a href="#" class="nav-logo">Celena <span>Dixon</span></a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="mailto:celena.dixon@example.com">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <h1 class="hero-title">
+        Design &amp;<br><em>Visual</em><br>Direction
+      </h1>
+      <div class="hero-badge glass glass-shimmer">
+        <span class="badge-dot"></span>
+        Available for freelance
+      </div>
+    </div>
+    <p class="hero-sub">
+      Graphic Design &amp; Brand Identity<br>
+      UC Davis · Davis, CA<br>
+      Brand · Print · Identity
+    </p>
+  </section>
+
+  <!-- FILTER -->
+  <div class="filter-wrap" id="work">
+    <div class="filter-bar glass">
+      <button class="filter-btn active" data-filter="all">All Work</button>
+      <button class="filter-btn" data-filter="branding">Branding</button>
+      <button class="filter-btn" data-filter="social">Social Media</button>
+      <button class="filter-btn" data-filter="print">Print</button>
+      <button class="filter-btn" data-filter="motion">Motion</button>
+    </div>
+  </div>
+
+  <!--
+    WORK GRID
+    To add a project:
+      1. Copy an <article class="card span-X"> block
+      2. Set data-category: branding | social | print | motion
+      3. Replace placeholder div with <img src="file.jpg" alt="Title">
+      4. Fill in card-title, card-sub, card-year, card-tag
+      5. Set href on .card-link to your project page
+    Recommended image sizes:
+      span-4 → 800×600   span-6 → 900×720
+      span-8 → 1200×840  span-12 → 1600×900
+  -->
+  <section class="work-grid">
+
+    <article class="card span-8" data-category="branding">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder">
+          <div class="ph-icon">✦</div>
+          <span class="placeholder-label">1200 × 840 recommended</span>
+        </div>
+      </div>
+      <div class="card-glass-overlay"><div class="card-cta glass">View Project ↗</div></div>
+      <div class="card-info">
+        <div>
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project — client name, role, or context.</p>
+        </div>
+        <div class="card-meta">
+          <span class="card-year">2025</span>
+          <span class="card-tag">Branding</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card span-4" data-category="social">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder">
+          <div class="ph-icon">✦</div>
+          <span class="placeholder-label">800 × 600 recommended</span>
+        </div>
+      </div>
+      <div class="card-glass-overlay"><div class="card-cta glass">View Project ↗</div></div>
+      <div class="card-info">
+        <div>
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project.</p>
+        </div>
+        <div class="card-meta">
+          <span class="card-year">2025</span>
+          <span class="card-tag">Social</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card span-6" data-category="branding">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder">
+          <div class="ph-icon">✦</div>
+          <span class="placeholder-label">900 × 720 recommended</span>
+        </div>
+      </div>
+      <div class="card-glass-overlay"><div class="card-cta glass">View Project ↗</div></div>
+      <div class="card-info">
+        <div>
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project.</p>
+        </div>
+        <div class="card-meta">
+          <span class="card-year">2025</span>
+          <span class="card-tag">Branding</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card span-6" data-category="print">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder">
+          <div class="ph-icon">✦</div>
+          <span class="placeholder-label">900 × 720 recommended</span>
+        </div>
+      </div>
+      <div class="card-glass-overlay"><div class="card-cta glass">View Project ↗</div></div>
+      <div class="card-info">
+        <div>
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project.</p>
+        </div>
+        <div class="card-meta">
+          <span class="card-year">2025</span>
+          <span class="card-tag">Print</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card span-4" data-category="social">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder">
+          <div class="ph-icon">✦</div>
+          <span class="placeholder-label">800 × 600 recommended</span>
+        </div>
+      </div>
+      <div class="card-glass-overlay"><div class="card-cta glass">View Project ↗</div></div>
+      <div class="card-info">
+        <div>
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project.</p>
+        </div>
+        <div class="card-meta">
+          <span class="card-year">2024</span>
+          <span class="card-tag">Social</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card span-8" data-category="branding">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder">
+          <div class="ph-icon">✦</div>
+          <span class="placeholder-label">1200 × 840 recommended</span>
+        </div>
+      </div>
+      <div class="card-glass-overlay"><div class="card-cta glass">View Project ↗</div></div>
+      <div class="card-info">
+        <div>
+          <p class="card-title">Project Title Here</p>
+          <p class="card-sub">Short description of the project.</p>
+        </div>
+        <div class="card-meta">
+          <span class="card-year">2024</span>
+          <span class="card-tag">Branding</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card span-12" data-category="branding">
+      <a href="#" class="card-link"></a>
+      <div class="card-img-wrap">
+        <div class="card-placeholder">
+          <div class="ph-icon">✦</div>
+          <span class="placeholder-label">Best piece here · 1600 × 900</span>
+        </div>
+      </div>
+      <div class="card-glass-overlay"><div class="card-cta glass">View Project ↗</div></div>
+      <div class="card-info">
+        <div>
+          <p class="card-title">Featured Project Title</p>
+          <p class="card-sub">A more detailed description — client, scope, outcome.</p>
+        </div>
+        <div class="card-meta">
+          <span class="card-year">2024</span>
+          <span class="card-tag">Branding</span>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ABOUT STRIP -->
+  <section class="about-strip" id="about">
+    <h2>Design with<br><em>intention.</em><br>Built to connect.</h2>
+    <div class="about-right">
+      <p>I'm Celena Dixon — a graphic designer and Design &amp; Studio Art student at UC Davis with a passion for brand identity, visual communication, and creating work that resonates. Currently External Brand Director at All Things Design and Graphic Designer at the UC Davis College of Engineering.</p>
+      <p>I thrive at the intersection of strategy and aesthetics — managing teams, building brand systems, and keeping client work organized and on-point across multiple projects at once.</p>
+
+      <!-- GET IN TOUCH BUTTON -->
+      <button class="env-btn" id="envBtn">Get in touch &#8594;</button>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>&#169; 2025 Celena Dixon</p>
+    <div class="footer-links">
+      <a href="mailto:celena.dixon@example.com">Email</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Instagram</a>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* ══════════════════════════════════════════════
+       CURSOR
+    ══════════════════════════════════════════════ */
+    var dot  = document.getElementById('cur-dot');
+    var ring = document.getElementById('cur-ring');
+    var mx = 0, my = 0, rx = 0, ry = 0, hovering = false;
+
+    document.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+    });
+
+    (function tick() {
+      rx += (mx - rx) * 0.11;
+      ry += (my - ry) * 0.11;
+      dot.style.left  = mx + 'px';
+      dot.style.top   = my + 'px';
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(tick);
+    }());
+
+    function bindHover(sel, cls) {
+      document.querySelectorAll(sel).forEach(function (el) {
+        el.addEventListener('mouseenter', function () { document.body.classList.add(cls);    hovering = true;  });
+        el.addEventListener('mouseleave', function () { document.body.classList.remove(cls); hovering = false; });
+      });
+    }
+    bindHover('.card',       'hov-card');
+    bindHover('a, .env-btn', 'hov-link');
+    bindHover('.filter-btn', 'hov-btn');
+
+    /* ══════════════════════════════════════════════
+       SPARKLES
+    ══════════════════════════════════════════════ */
+    var palette = [
+      '#84C47A','#A8D89E','#5BA34F','#C8E8B8','#FFD97D',
+      '#FFB347','#B4E8C0','#78C896','#D4F0C0','#A0D488',
+      '#E8F8B0','#68B860','#F0E8A0','#90D070','#C0F0A0'
+    ];
+    var cIdx = 0, lastSpark = 0, sparkCount = 0;
+    var MAX = 42, INTERVAL = 26;
+
+    function spawnSpark(x, y, big) {
+      if (sparkCount >= MAX) return;
+      var el    = document.createElement('div');
+      el.className = 'spark';
+      var color = palette[cIdx++ % palette.length];
+      var size  = big ? 6 + Math.random() * 9  : 3 + Math.random() * 5;
+      var angle = Math.random() * Math.PI * 2;
+      var dist  = big ? 22 + Math.random() * 42 : 8 + Math.random() * 18;
+      var dur   = big ? 0.5 + Math.random() * 0.5 : 0.3 + Math.random() * 0.35;
+      var ex    = Math.cos(angle) * dist;
+      var ey    = Math.sin(angle) * dist;
+      var star  = big && Math.random() > 0.45;
+      el.style.cssText = [
+        'left:' + x + 'px',
+        'top:' + y + 'px',
+        'width:' + size + 'px',
+        'height:' + size + 'px',
+        'background:' + color,
+        'box-shadow:0 0 ' + (size*2) + 'px ' + color + ',0 0 ' + (size*4) + 'px ' + color + '55',
+        '--dur:' + dur + 's',
+        '--ex:' + ex + 'px',
+        '--ey:' + ey + 'px',
+        star ? 'clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);border-radius:0' : ''
+      ].join(';');
+      document.body.appendChild(el);
+      sparkCount++;
+      setTimeout(function () { el.remove(); sparkCount--; }, dur * 1000 + 80);
+      dot.style.boxShadow = '0 0 12px ' + color + ',0 0 6px ' + color;
+    }
+
+    document.addEventListener('mousemove', function (e) {
+      var now = Date.now();
+      if (now - lastSpark < INTERVAL) return;
+      lastSpark = now;
+      var n = hovering ? 2 : 1;
+      for (var i = 0; i < n; i++)
+        spawnSpark(e.clientX + (Math.random() - 0.5) * 12, e.clientY + (Math.random() - 0.5) * 12, hovering);
+    });
+
+    document.addEventListener('click', function (e) {
+      for (var i = 0; i < 14; i++)
+        (function (i) { setTimeout(function () { spawnSpark(e.clientX, e.clientY, true); }, i * 28); }(i));
+    });
+
+    /* ══════════════════════════════════════════════
+       NAV SCROLL
+    ══════════════════════════════════════════════ */
+    var nav = document.getElementById('nav');
+    window.addEventListener('scroll', function () {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    /* ══════════════════════════════════════════════
+       FILTER
+    ══════════════════════════════════════════════ */
+    document.querySelectorAll('.filter-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var f = btn.dataset.filter;
+        document.querySelectorAll('.card').forEach(function (card, i) {
+          var show = f === 'all' || card.dataset.category === f;
+          card.classList.toggle('hidden', !show);
+          if (show) {
+            card.classList.remove('visible');
+            setTimeout(function () { card.classList.add('visible'); }, i * 55);
+          }
+        });
+      });
+    });
+
+    /* ══════════════════════════════════════════════
+       SCROLL-IN CARDS
+    ══════════════════════════════════════════════ */
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e, i) {
+        if (e.isIntersecting) {
+          setTimeout(function () { e.target.classList.add('visible'); }, i * 75);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.07 });
+    document.querySelectorAll('.card').forEach(function (c) { io.observe(c); });
+
+
+
+  }());
+  </script>
+</body>
+</html>
