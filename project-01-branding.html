@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verdant<br><em>Rebrand</em> &mdash; Celena Dixon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #F5F2EC;
+      --cream2:   #EEE9DF;
+      --ink:      #1C1F18;
+      --mid:      #7A8570;
+      --rule:     #D8D5CC;
+      --moss:     #4A6741;
+      --moss-l:   #C8DAC4;
+      --fern:     #6B8F5E;
+      --fern-l:   #DCE8D8;
+      --sage:     #9AB48A;
+      --glass-bg: rgba(255,255,255,0.48);
+      --glass-b:  rgba(255,255,255,0.76);
+      --glass-sh: rgba(100,130,90,0.13);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    /* ── ORBS ─────────────────────────────────── */
+    .bg-orbs { position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden; }
+    .orb { position:absolute;border-radius:50%;filter:blur(90px);opacity:0.32;animation:orbDrift 22s ease-in-out infinite; }
+    .orb-1 { width:580px;height:580px;background:radial-gradient(circle,#C8DAC4,transparent 70%);top:-140px;right:-80px;animation-duration:22s; }
+    .orb-2 { width:460px;height:460px;background:radial-gradient(circle,#DCE8D8,transparent 70%);bottom:8%;left:-70px;animation-duration:27s;animation-delay:-9s; }
+    .orb-3 { width:340px;height:340px;background:radial-gradient(circle,#E0EDD8,transparent 70%);top:40%;right:16%;animation-duration:24s;animation-delay:-5s; }
+    @keyframes orbDrift {
+      0%,100%{ transform:translate(0,0) scale(1); }
+      25%    { transform:translate(28px,-38px) scale(1.05); }
+      50%    { transform:translate(-20px,28px) scale(0.95); }
+      75%    { transform:translate(38px,18px) scale(1.03); }
+    }
+
+    /* ── GLASS ────────────────────────────────── */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(22px) saturate(190%);
+      -webkit-backdrop-filter: blur(22px) saturate(190%);
+      border: 1px solid var(--glass-b);
+      box-shadow: 0 8px 32px var(--glass-sh),
+        inset 0 1.5px 0 rgba(255,255,255,0.9),
+        inset 0 -1px 0 rgba(255,255,255,0.25);
+    }
+    .glass-shimmer { position:relative;overflow:hidden; }
+    .glass-shimmer::before {
+      content:'';position:absolute;top:-60%;left:-70%;
+      width:44%;height:220%;
+      background:linear-gradient(108deg,transparent 28%,rgba(255,255,255,0.6) 50%,transparent 72%);
+      transform:skewX(-18deg);
+      animation:shimmerPass 6s ease-in-out infinite;
+      pointer-events:none;z-index:10;
+    }
+    @keyframes shimmerPass {
+      0%{left:-70%;opacity:0;}15%{opacity:1;}65%{left:120%;opacity:0.5;}100%{left:130%;opacity:0;}
+    }
+
+    /* ── CURSOR ───────────────────────────────── */
+    #cur-dot {
+      position:fixed;width:12px;height:12px;border-radius:50%;
+      background:var(--moss);pointer-events:none;z-index:9999;
+      transform:translate(-50%,-50%);
+      transition:width .3s cubic-bezier(.34,1.56,.64,1),height .3s cubic-bezier(.34,1.56,.64,1),background .25s;
+      box-shadow:0 0 10px rgba(74,103,65,.6);
+    }
+    #cur-ring {
+      position:fixed;width:36px;height:36px;border-radius:50%;
+      border:1.5px solid rgba(74,103,65,.45);
+      pointer-events:none;z-index:9998;
+      transform:translate(-50%,-50%);
+      transition:width .45s cubic-bezier(.23,1,.32,1),height .45s cubic-bezier(.23,1,.32,1),border-color .3s,border-radius .4s;
+    }
+    body.hov-link #cur-dot  { width:9px;height:9px; }
+    body.hov-link #cur-ring { width:38px;height:12px;border-radius:8px; }
+    .spark {
+      position:fixed;pointer-events:none;z-index:9997;border-radius:50%;
+      transform:translate(-50%,-50%);
+      animation:sparkOut var(--dur,.6s) ease-out forwards;
+    }
+    @keyframes sparkOut {
+      0%  { opacity:1;transform:translate(-50%,-50%) translate(0,0) scale(1); }
+      100%{ opacity:0;transform:translate(-50%,-50%) translate(var(--ex,0px),var(--ey,0px)) scale(0); }
+    }
+
+    /* ── NAV ──────────────────────────────────── */
+    nav {
+      position:fixed;top:16px;left:50%;transform:translateX(-50%);
+      z-index:500;width:calc(100% - 64px);max-width:1200px;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 30px;border-radius:100px;
+      transition:box-shadow .3s;
+    }
+    nav.scrolled {
+      box-shadow:0 16px 48px rgba(80,110,70,.18),inset 0 1px 0 rgba(255,255,255,.92);
+    }
+    .nav-left { display:flex;align-items:center;gap:28px; }
+    .nav-back {
+      font-family:'DM Mono',monospace;font-size:.66rem;
+      letter-spacing:.14em;text-transform:uppercase;
+      text-decoration:none;color:var(--mid);
+      display:flex;align-items:center;gap:7px;
+      transition:color .2s;
+    }
+    .nav-back:hover { color:var(--moss); }
+    .nav-back-arrow { font-size:.8rem;transition:transform .2s; }
+    .nav-back:hover .nav-back-arrow { transform:translateX(-3px); }
+    .nav-logo {
+      font-family:'Cormorant Garamond',serif;
+      font-weight:300;font-size:1.3rem;letter-spacing:.06em;
+      text-decoration:none;color:var(--ink);
+    }
+    .nav-logo span { font-style:italic;color:var(--moss); }
+
+    /* ── HERO ─────────────────────────────────── */
+    .project-hero {
+      position:relative;z-index:1;
+      padding:140px 48px 56px;
+      border-bottom:1px solid var(--rule);
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:60px;
+      align-items:end;
+    }
+    .project-hero-left {}
+    .project-eyebrow {
+      font-family:'DM Mono',monospace;font-size:.62rem;
+      letter-spacing:.18em;text-transform:uppercase;color:var(--mid);
+      margin-bottom:18px;display:flex;align-items:center;gap:10px;
+    }
+    .project-eyebrow::before {
+      content:'';display:inline-block;
+      width:24px;height:1px;background:var(--mid);
+    }
+    .project-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2.8rem,6vw,5.5rem);
+      font-weight:300;line-height:.95;letter-spacing:-.01em;
+    }
+    .project-title em { font-style:italic;color:var(--moss); }
+
+    .project-hero-right {
+      display:flex;flex-direction:column;gap:28px;
+      padding-bottom:4px;
+    }
+    .project-meta-grid {
+      display:grid;grid-template-columns:1fr 1fr;gap:20px 32px;
+    }
+    .meta-item {}
+    .meta-label {
+      font-family:'DM Mono',monospace;font-size:.55rem;
+      letter-spacing:.18em;text-transform:uppercase;color:var(--mid);
+      margin-bottom:5px;
+    }
+    .meta-value {
+      font-family:'Outfit',sans-serif;font-size:.88rem;
+      font-weight:400;color:var(--ink);
+    }
+
+    /* ── HERO IMAGE ───────────────────────────── */
+    .project-hero-img {
+      position:relative;z-index:1;
+      width:100%;aspect-ratio:16/7;
+      overflow:hidden;background:var(--cream2);
+      border-bottom:1px solid var(--rule);
+    }
+    .project-hero-img img {
+      width:100%;height:100%;object-fit:cover;display:block;
+    }
+    /* placeholder when no image */
+    .img-placeholder {
+      width:100%;height:100%;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:12px;
+      background:var(--cream2);
+    }
+    .img-placeholder-icon {
+      width:56px;height:56px;border:1.5px dashed var(--rule);border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      color:var(--mid);font-size:1.1rem;
+    }
+    .img-placeholder-label {
+      font-family:'DM Mono',monospace;font-size:.6rem;
+      letter-spacing:.14em;text-transform:uppercase;color:var(--mid);opacity:.5;
+    }
+
+    /* ── CONTENT WRAPPER ──────────────────────── */
+    .project-content {
+      position:relative;z-index:1;
+      max-width:1200px;margin:0 auto;
+      padding:0 48px;
+    }
+
+    /* ── SECTION SHARED ───────────────────────── */
+    .project-section {
+      padding:72px 0;
+      border-bottom:1px solid var(--rule);
+      display:grid;
+      grid-template-columns:200px 1fr;
+      gap:60px;
+      align-items:start;
+    }
+    .section-label {
+      font-family:'DM Mono',monospace;font-size:.6rem;
+      letter-spacing:.18em;text-transform:uppercase;
+      color:var(--mid);padding-top:6px;
+      position:sticky;top:100px;
+    }
+    .section-body {}
+    .section-body h3 {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(1.6rem,3vw,2.4rem);
+      font-weight:300;line-height:1.1;
+      margin-bottom:20px;
+    }
+    .section-body h3 em { font-style:italic;color:var(--moss); }
+    .section-body p {
+      font-size:.9rem;line-height:1.95;color:var(--mid);
+      max-width:620px;
+    }
+    .section-body p + p { margin-top:16px; }
+
+    /* ── ROLE & PROCESS ───────────────────────── */
+    .process-steps {
+      display:flex;flex-direction:column;gap:0;
+      margin-top:36px;
+    }
+    .process-step {
+      display:grid;
+      grid-template-columns:48px 1fr;
+      gap:20px;
+      padding:24px 0;
+      border-top:1px solid var(--rule);
+      align-items:start;
+    }
+    .step-num {
+      font-family:'DM Mono',monospace;font-size:.6rem;
+      letter-spacing:.12em;color:var(--mid);padding-top:3px;
+    }
+    .step-body {}
+    .step-title {
+      font-family:'Outfit',sans-serif;font-weight:400;
+      font-size:.88rem;color:var(--ink);margin-bottom:6px;
+    }
+    .step-desc {
+      font-size:.82rem;line-height:1.8;color:var(--mid);
+    }
+
+    /* ── GALLERY ──────────────────────────────── */
+    .gallery-grid {
+      display:grid;
+      grid-template-columns:repeat(12,1fr);
+      gap:2px;
+      background:var(--rule);
+      margin-top:36px;
+      border:2px solid var(--rule);
+    }
+    .gallery-item {
+      background:var(--cream2);
+      overflow:hidden;
+    }
+    .gallery-item.g-span-8  { grid-column:span 8; }
+    .gallery-item.g-span-6  { grid-column:span 6; }
+    .gallery-item.g-span-4  { grid-column:span 4; }
+    .gallery-item.g-span-12 { grid-column:span 12; }
+    .gallery-item img {
+      width:100%;height:100%;object-fit:cover;display:block;
+      transition:transform .6s cubic-bezier(.25,.46,.45,.94),filter .4s;
+      filter:saturate(.92);
+    }
+    .gallery-item:hover img { transform:scale(1.03);filter:saturate(1.05); }
+    .gallery-item .img-placeholder { min-height:280px; }
+    .gallery-item.g-span-12 .img-placeholder { min-height:380px; }
+
+    /* ── OUTCOMES ─────────────────────────────── */
+    .outcomes-grid {
+      display:grid;grid-template-columns:repeat(3,1fr);
+      gap:2px;background:var(--rule);
+      margin-top:36px;border:2px solid var(--rule);
+    }
+    .outcome-card {
+      background:var(--cream);
+      padding:32px 28px;
+    }
+    .outcome-stat {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2rem,4vw,3rem);
+      font-weight:300;color:var(--moss);
+      line-height:1;margin-bottom:10px;
+    }
+    .outcome-desc {
+      font-family:'Outfit',sans-serif;font-size:.8rem;
+      font-weight:300;line-height:1.7;color:var(--mid);
+    }
+
+    /* ── NEXT PROJECT ─────────────────────────── */
+    .next-project {
+      position:relative;z-index:1;
+      border-top:1px solid var(--rule);
+      background:var(--cream2);
+      display:block;text-decoration:none;
+      padding:56px 48px;
+      transition:background .3s;
+    }
+    .next-project:hover { background:var(--moss-l); }
+    .next-label {
+      font-family:'DM Mono',monospace;font-size:.6rem;
+      letter-spacing:.18em;text-transform:uppercase;color:var(--mid);
+      margin-bottom:16px;display:flex;align-items:center;gap:10px;
+    }
+    .next-label::after {
+      content:'';flex:1;height:1px;background:var(--rule);
+    }
+    .next-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2rem,5vw,4rem);
+      font-weight:300;color:var(--ink);
+      display:flex;align-items:center;justify-content:space-between;
+      gap:24px;
+    }
+    .next-arrow { font-size:2rem;color:var(--moss);transition:transform .3s; }
+    .next-project:hover .next-arrow { transform:translateX(8px); }
+
+    /* ── FOOTER ───────────────────────────────── */
+    footer {
+      border-top:1px solid var(--rule);padding:26px 48px;
+      display:flex;justify-content:space-between;align-items:center;
+      background:var(--cream2);position:relative;z-index:1;
+    }
+    footer p { font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;color:var(--mid); }
+    .footer-links { display:flex;gap:28px; }
+    .footer-links a {
+      font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;
+      text-decoration:none;color:var(--mid);transition:color .2s;
+    }
+    .footer-links a:hover { color:var(--moss); }
+
+    /* ── FADE-IN ON SCROLL ────────────────────── */
+    .fade-up {
+      opacity:0;transform:translateY(22px);
+      transition:opacity .6s ease,transform .6s ease;
+    }
+    .fade-up.visible { opacity:1;transform:translateY(0); }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media(max-width:900px){
+      nav{ width:calc(100% - 32px);padding:12px 20px; }
+      .project-hero{ grid-template-columns:1fr;gap:36px;padding:120px 24px 48px; }
+      .project-content{ padding:0 24px; }
+      .project-section{ grid-template-columns:1fr;gap:20px; }
+      .section-label{ position:static; }
+      .outcomes-grid{ grid-template-columns:1fr; }
+      .gallery-grid{ grid-template-columns:1fr; }
+      .gallery-item.g-span-8,.gallery-item.g-span-6,.gallery-item.g-span-4{ grid-column:span 1; }
+      .next-project{ padding:40px 24px; }
+      footer{ flex-direction:column;gap:14px;padding:24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div id="cur-dot"></div>
+  <div id="cur-ring"></div>
+
+  <!-- NAV -->
+  <nav id="nav" class="glass glass-shimmer">
+    <div class="nav-left">
+      <a href="index.html#work" class="nav-back">
+        <span class="nav-back-arrow">&#8592;</span> Back to Work
+      </a>
+    </div>
+    <a href="index.html" class="nav-logo">Celena <span>Dixon</span></a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="project-hero">
+    <div class="project-hero-left">
+      <p class="project-eyebrow">Branding</p>
+      <h1 class="project-title">Verdant<br><em>Rebrand</em></h1>
+    </div>
+    <div class="project-hero-right">
+      <div class="project-meta-grid">
+        <div class="meta-item">
+          <p class="meta-label">Client</p>
+          <p class="meta-value">Verdant Co.</p>
+        </div>
+        <div class="meta-item">
+          <p class="meta-label">Year</p>
+          <p class="meta-value">2025</p>
+        </div>
+        <div class="meta-item">
+          <p class="meta-label">Role</p>
+          <p class="meta-value">Brand Designer</p>
+        </div>
+        <div class="meta-item">
+          <p class="meta-label">Deliverables</p>
+          <p class="meta-value">Logo, Guidelines, Collateral</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HERO IMAGE — replace placeholder with: <img src="hero.jpg" alt="Verdant<br><em>Rebrand</em>"> -->
+  <div class="project-hero-img">
+    <div class="img-placeholder">
+      <div class="img-placeholder-icon">&#10022;</div>
+      <span class="img-placeholder-label">Hero image &mdash; 1600 &times; 700px recommended</span>
+    </div>
+  </div>
+
+  <div class="project-content">
+
+    <!-- OVERVIEW -->
+    <div class="project-section fade-up">
+      <p class="section-label">Overview</p>
+      <div class="section-body">
+        <h3>The <em>Brief</em></h3>
+        <p>Verdant Co. had been operating for six years under a visual identity built at launch — a wordmark that no longer reflected the maturity and ambition of the brand. They needed a full rebrand to position themselves for enterprise clients while retaining the warmth that made them successful with smaller studios.</p>
+        <p>The challenge was balance: too polished and they risk alienating their existing community; too casual and they lose credibility in the room with larger clients. I was brought in to lead visual identity from strategy through final delivery.</p>
+      </div>
+    </div>
+
+    <!-- ROLE & PROCESS -->
+    <div class="project-section fade-up">
+      <p class="section-label">Role &amp; Process</p>
+      <div class="section-body">
+        <h3>How I <em>Approached</em> It</h3>
+        <p>I led this project end-to-end over eight weeks, from initial discovery through brand guidelines handoff.</p>
+        <div class="process-steps">
+          <div class="process-step">
+            <span class="step-num">01</span>
+            <div class="step-body">
+              <p class="step-title">Brand Audit &amp; Discovery</p>
+              <p class="step-desc">Interviewed five key stakeholders and reviewed two years of marketing materials. Ran a competitor audit across 12 brands in the same space to identify whitespace in the category.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <span class="step-num">02</span>
+            <div class="step-body">
+              <p class="step-title">Positioning &amp; Moodboarding</p>
+              <p class="step-desc">Synthesized audit findings into three distinct positioning territories, each with its own visual language. Presented moodboards to align the team before any logo work began.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <span class="step-num">03</span>
+            <div class="step-body">
+              <p class="step-title">Identity Design</p>
+              <p class="step-desc">Developed two logo directions in Illustrator, each tested across a range of lockups, sizes, and backgrounds. Refined the chosen direction through three rounds of feedback.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <span class="step-num">04</span>
+            <div class="step-body">
+              <p class="step-title">System &amp; Handoff</p>
+              <p class="step-desc">Built a complete brand system including typography scale, color tokens, iconography guidelines, and a 40-page PDF brand guide. Delivered Figma source files and print-ready assets.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="project-section fade-up">
+      <p class="section-label">Gallery</p>
+      <div class="section-body">
+        <h3>The <em>Work</em></h3>
+        <p>The system was built to flex across digital, print, and environmental applications — from a small favicon to a large-format trade show backdrop.</p>
+        <div class="gallery-grid">
+          <div class="gallery-item g-span-12">
+            <div class="img-placeholder">
+              <div class="img-placeholder-icon">&#10022;</div>
+              <span class="img-placeholder-label">Primary logo presentation &mdash; 1600 &times; 900px</span>
+            </div>
+            <!-- <img src="your-image.jpg" alt="Description"> -->
+          </div>
+          <div class="gallery-item g-span-6">
+            <div class="img-placeholder">
+              <div class="img-placeholder-icon">&#10022;</div>
+              <span class="img-placeholder-label">Color palette &mdash; 900 &times; 720px</span>
+            </div>
+            <!-- <img src="your-image.jpg" alt="Description"> -->
+          </div>
+          <div class="gallery-item g-span-6">
+            <div class="img-placeholder">
+              <div class="img-placeholder-icon">&#10022;</div>
+              <span class="img-placeholder-label">Typography specimen &mdash; 900 &times; 720px</span>
+            </div>
+            <!-- <img src="your-image.jpg" alt="Description"> -->
+          </div>
+          <div class="gallery-item g-span-8">
+            <div class="img-placeholder">
+              <div class="img-placeholder-icon">&#10022;</div>
+              <span class="img-placeholder-label">Brand application mockup &mdash; 1200 &times; 840px</span>
+            </div>
+            <!-- <img src="your-image.jpg" alt="Description"> -->
+          </div>
+          <div class="gallery-item g-span-4">
+            <div class="img-placeholder">
+              <div class="img-placeholder-icon">&#10022;</div>
+              <span class="img-placeholder-label">Logo mark detail &mdash; 800 &times; 840px</span>
+            </div>
+            <!-- <img src="your-image.jpg" alt="Description"> -->
+          </div>
+          <div class="gallery-item g-span-4">
+            <div class="img-placeholder">
+              <div class="img-placeholder-icon">&#10022;</div>
+              <span class="img-placeholder-label">Business card &mdash; 800 &times; 600px</span>
+            </div>
+            <!-- <img src="your-image.jpg" alt="Description"> -->
+          </div>
+          <div class="gallery-item g-span-4">
+            <div class="img-placeholder">
+              <div class="img-placeholder-icon">&#10022;</div>
+              <span class="img-placeholder-label">Letterhead &mdash; 800 &times; 600px</span>
+            </div>
+            <!-- <img src="your-image.jpg" alt="Description"> -->
+          </div>
+          <div class="gallery-item g-span-4">
+            <div class="img-placeholder">
+              <div class="img-placeholder-icon">&#10022;</div>
+              <span class="img-placeholder-label">Packaging &mdash; 800 &times; 600px</span>
+            </div>
+            <!-- <img src="your-image.jpg" alt="Description"> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUTCOMES -->
+    <div class="project-section fade-up">
+      <p class="section-label">Outcomes</p>
+      <div class="section-body">
+        <h3>What It <em>Achieved</em></h3>
+        <p>The rebrand launched in Q1 2025 and was rolled out across all touchpoints within four weeks of delivery.</p>
+        <div class="outcomes-grid">
+          <div class="outcome-card">
+            <p class="outcome-stat">3&#215;</p>
+            <p class="outcome-desc">Increase in enterprise sales inquiries in the quarter following the rebrand launch.</p>
+          </div>
+          <div class="outcome-card">
+            <p class="outcome-stat">8 wks</p>
+            <p class="outcome-desc">Full project timeline from discovery kickoff to final brand guidelines delivery.</p>
+          </div>
+          <div class="outcome-card">
+            <p class="outcome-stat">&#10022;</p>
+            <p class="outcome-desc">Brand guidelines adopted company-wide with zero revision requests post-handoff — a first for the client.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NEXT PROJECT -->
+  <a href="project-02-social.html" class="next-project">
+    <p class="next-label">Next Project</p>
+    <p class="next-title">
+      UC Davis Engineering Social Campaign
+      <span class="next-arrow">&#8594;</span>
+    </p>
+  </a>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&#169; 2025 Celena Dixon</p>
+    <div class="footer-links">
+      <a href="mailto:celena.dixon@example.com">Email</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Instagram</a>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    var dot  = document.getElementById('cur-dot');
+    var ring = document.getElementById('cur-ring');
+    var mx = 0, my = 0, rx = 0, ry = 0, hovering = false;
+    document.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; });
+    (function tick() {
+      rx += (mx - rx) * 0.11; ry += (my - ry) * 0.11;
+      dot.style.left  = mx + 'px'; dot.style.top   = my + 'px';
+      ring.style.left = rx + 'px'; ring.style.top  = ry + 'px';
+      requestAnimationFrame(tick);
+    }());
+    document.querySelectorAll('a').forEach(function (el) {
+      el.addEventListener('mouseenter', function () { document.body.classList.add('hov-link');    hovering = true; });
+      el.addEventListener('mouseleave', function () { document.body.classList.remove('hov-link'); hovering = false; });
+    });
+    var palette = ['#84C47A','#A8D89E','#5BA34F','#C8E8B8','#FFD97D','#FFB347','#B4E8C0','#78C896','#D4F0C0','#A0D488'];
+    var cIdx = 0, lastSpark = 0, sparkCount = 0;
+    function spawnSpark(x, y, big) {
+      if (sparkCount >= 42) return;
+      var el = document.createElement('div'); el.className = 'spark';
+      var color = palette[cIdx++ % palette.length];
+      var size  = big ? 6 + Math.random()*9  : 3 + Math.random()*5;
+      var angle = Math.random() * Math.PI * 2;
+      var dist  = big ? 22 + Math.random()*42 : 8 + Math.random()*18;
+      var dur   = big ? 0.5 + Math.random()*0.5 : 0.3 + Math.random()*0.35;
+      el.style.cssText = 'left:'+x+'px;top:'+y+'px;width:'+size+'px;height:'+size+'px;background:'+color+';box-shadow:0 0 '+(size*2)+'px '+color+';--dur:'+dur+'s;--ex:'+(Math.cos(angle)*dist)+'px;--ey:'+(Math.sin(angle)*dist)+'px';
+      document.body.appendChild(el); sparkCount++;
+      setTimeout(function(){ el.remove(); sparkCount--; }, dur*1000+80);
+    }
+    document.addEventListener('mousemove', function(e){
+      var now = Date.now(); if(now - lastSpark < 26) return; lastSpark = now;
+      spawnSpark(e.clientX+(Math.random()-.5)*12, e.clientY+(Math.random()-.5)*12, hovering);
+    });
+    document.addEventListener('click', function(e){
+      for(var i=0;i<14;i++) (function(i){ setTimeout(function(){ spawnSpark(e.clientX,e.clientY,true); },i*28); }(i));
+    });
+    var nav = document.getElementById('nav');
+    window.addEventListener('scroll', function(){ nav.classList.toggle('scrolled', window.scrollY > 40); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-up').forEach(function(el){ io.observe(el); });
+  }());
+</script>
+</body>
+</html>
